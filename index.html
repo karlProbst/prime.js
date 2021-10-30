@@ -10,55 +10,75 @@
     <h2>insira um número:</h2>
 
     <input type="text" id="numberbox">
+
+    <button type="button" id="button">Calcular</button>
     <br>
-    <textarea type="textarea" id="outputbox" cols=23 rows=75></textarea>
+    Dividir apenas por números primos?<input type="checkbox" id="optionIsPrime">
     <br>
-    <button type="button" id="button"></button>
+    Mostrar todos os primos?<input type="checkbox" id="optionAllPrime">
+    <br>
+    <textarea type="textarea" id="outputbox" cols=40 rows=75></textarea>
+    
     <p id="output"></p>
 
 
     <script>
+        var outputStr = "";
+        var optionIsPrime = false;
         function isPrime(n){
             for(let i = 2;i<n-1;i++)
-                if(i%n==0)
-                    return false;
+                if(n%i==0){  
+                    return false;         
+                };
             return true;
         };
         function trace(str){
-            console.log(str);
-            
+            //console.log(str);
+            outputStr+=str+"\n";
         };
         function doIt(n){
             let resto = 0;
-            if(n>999){
+            if(n>9999){
                 trace("número grande demais!");
                 return;
                 
             }
             for(let i = 2;i<n-1;i++){
-
-                if(isPrime(i)){
+                
+                if(isPrime(i) || optionIsPrime){
                     resto = n%i;
-
-
                     trace(n+"/"+i+" = "+parseInt(n/i)+" , resto= "+resto);
                 };
                 if(resto==0){
-                    trace("resto zero, "+n+" não é primo");
-                    return;
+                    if(!optionAllPrime){
+                        trace("resto zero, "+n+" não é primo");
+                        return;
+                    }
                     //print é primo!
                 }
             }
             trace(n+" é primo!")
         }
+        //mostrar resultado
+        function myDisplayer() {
+            document.getElementById("outputbox").innerHTML = outputStr;
+        };
         //html elements
         const numberid = document.getElementById("numberbox");
         const buttonid = document.getElementById("button");
         const inputid = document.getElementById("inputbox");
         const outputid = document.getElementById("outputbox");
-        
+        const optionIsPrimeid = document.getElementById("optionIsPrime");
+        const optionAllPrimeid = document.getElementById("optionAllPrime");
 
-        numberid.addEventListener("click", () => { doIt(numberid.value); });
+        
+        buttonid.addEventListener("click", () => {
+            optionIsPrime = optionIsPrimeid.checked;
+            optionAllPrime = optionAllPrimeid.checked;
+            //limpar output
+            outputStr="";
+            doIt(numberid.value);myDisplayer();
+        });
         //numberid.addEventListener("keyup", () => { changeNum(numberid.value,); });
         //numberid.addEventListener("keyup", () => { doIt(inputid.value); });
     </script>
